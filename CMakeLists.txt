@@ -29,11 +29,11 @@ include_directories(${LIBCONFIGPP_INCLUDE_DIR})
 add_definitions(-DUSE_CUDA=1
         -DUSEMPI=0
         -DUSE_BOOST=1
-        -DUSEIONIZATION=1
+        -DUSEIONIZATION=0
         -DUSERECOMBINATION=0
-        -DUSEPERPDIFFUSION=1
-        -DUSECOULOMBCOLLISIONS=1
-        -DUSETHERMALFORCE=1
+        -DUSEPERPDIFFUSION=0
+        -DUSECOULOMBCOLLISIONS=0
+        -DUSETHERMALFORCE=0
         -DUSESURFACEMODEL=0
         -DUSESHEATHEFIELD=1
         -DBIASED_SURFACE=1
@@ -64,6 +64,10 @@ add_definitions(-DUSE_CUDA=1
 if (${CUDA})
     Message("Enabling CUDA backend")
     find_package(CUDA REQUIRED)
+    find_package(OpenMP REQUIRED)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set_source_files_properties(${SRC_FILES} PROPERTIES LANGUAGE CXX)
     set(CUDA_HOST_COMPILER ${CMAKE_CXX_COMPILER})
     set(CUDA_SEPARABLE_COMPILATION TRUE)
     set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} -DCUDA  --std=c++11 -O3) #-O3 --expt-extended-lambda --expt-relaxed-constexpr -g -G --cudart shared

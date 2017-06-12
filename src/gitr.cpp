@@ -49,7 +49,7 @@
 #include <thrust/sequence.h>
 #include <thrust/transform.h>
 #include <thrust/functional.h>
-
+#include <omp.h>
 using namespace std;
 using namespace libconfig;
 
@@ -1656,6 +1656,16 @@ nc_gridZLc.putVar(&gridZLc[0]);
   int ionization_nDtPerApply  = cfg.lookup("timeStep.ionization_nDtPerApply");
   int collision_nDtPerApply  = cfg.lookup("timeStep.collision_nDtPerApply");
 
+  int deviceCount; 
+  cudaGetDeviceCount(&deviceCount); 
+  int device; 
+  for (device = 0; device < deviceCount; ++device) 
+  { 
+      cudaDeviceProp deviceProp; 
+      cudaGetDeviceProperties(&deviceProp, device); 
+      printf("Device %d has compute capability %d.%d.\n", device, deviceProp.major, deviceProp.minor);
+  }
+
   #ifdef __CUDACC__
     cout<<"Using THRUST"<<endl;
   #else
@@ -2384,12 +2394,21 @@ nc_gridZLc.putVar(&gridZLc[0]);
     #if __CUDACC__
       cudaDeviceSynchronize();
     #endif
+            omp_set_num_threads(deviceCount);  // create as many CPU threads as there are CUDA devices
+            #pragma omp parallel
+            {
+              unsigned int cpu_thread_id = omp_get_thread_num();
+              cudaSetDevice(cpu_thread_id);
     for(int tt=0; tt< nT; tt++)
     {
 #ifdef __CUDACC__
     cudaThreadSynchronize();
 #endif
-        thrust::for_each(thrust::device, particleBegin,particleEnd, 
+      //for (device = 0; device < deviceCount; ++device)
+        //    {
+           //     cudaSetDevice(device);
+            // run as many CPU threads as there are CUDA devices
+        thrust::for_each(thrust::device, particleBegin+cpu_thread_id*nParticles/deviceCount, particleBegin + (cpu_thread_id+1)*nParticles/deviceCount-1, 
                 move_boris(particleArray,dt,boundaries.data(), nLines,
                     nR_Bfield,nZ_Bfield, bfieldGridr.data(),&bfieldGridz.front(),
                     &br.front(),&bz.front(),&bt.front(),
@@ -2399,21 +2418,26 @@ nc_gridZLc.putVar(&gridZLc[0]);
                         nR_closeGeom_sheath,nY_closeGeom_sheath,nZ_closeGeom_sheath,n_closeGeomElements_sheath,
                         &closeGeomGridr_sheath.front(),&closeGeomGridy_sheath.front(),&closeGeomGridz_sheath.front(),
                         &closeGeom_sheath.front()) );
-        
-        
+        //cudaDeviceSynchronize();
+            
+              //  cudaThreadExit(); 
+            //}
+            //cudaDeviceSynchronize();
         //try {
-            thrust::for_each(thrust::device, particleBegin,particleEnd,
+            thrust::for_each(thrust::device, particleBegin+cpu_thread_id*nParticles/deviceCount, particleBegin + (cpu_thread_id+1)*nParticles/deviceCount-1,
                     geometry_check(particleArray,nLines,&boundaries[0],dt,tt,
                         nR_closeGeom,nY_closeGeom,nZ_closeGeom,n_closeGeomElements,
                         &closeGeomGridr.front(),&closeGeomGridy.front(),&closeGeomGridz.front(),
                         &closeGeom.front()) );
-       // }
+        
        /*
             catch (thrust::system_error &e) {
             std::cerr << "Thrust system error: " << e.what() << std::endl;
             exit(-1);
         }
         */
+           
+      //cudaSetDevice(0);
 #if SPECTROSCOPY > 0
             thrust::for_each(thrust::device, particleBegin,particleEnd,
                     spec_bin(particleArray,nBins,net_nX,net_nY, net_nZ, &gridX_bins.front(),&gridY_bins.front(),
@@ -2503,6 +2527,7 @@ if (tt % subSampleFac == 0)
 #endif
 #endif
     }
+}
 // Ensure that all time step loop GPU kernels are complete before proceeding
     #ifdef __CUDACC__
         cudaDeviceSynchronize();
