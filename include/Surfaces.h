@@ -16,11 +16,11 @@
 //#include "managed_allocation.h"
 
 #ifdef __CUDACC__
-#include <thrust/host_vector.h>
-#include <thrust/device_vector.h>
-#include <thrust/copy.h>
-#include <thrust/random.h>
 #include <curand_kernel.h>
+#include <thrust/copy.h>
+#include <thrust/device_vector.h>
+#include <thrust/host_vector.h>
+#include <thrust/random.h>
 #endif
 
 #include <random>
@@ -28,8 +28,8 @@
 //CUDA_CALLABLE_MEMBER
 
 class Surfaces : public ManagedAllocation {
-public: 
-  int nSurfaces;  
+public:
+  int nSurfaces;
   int nE;
   int nA;
   float E0;
@@ -51,31 +51,30 @@ public:
   sim::Array<float> reflDistribution;
 
   CUDA_CALLABLE_MEMBER
-  
-  void  setSurface(int nE,float E0,float E, int nA, float A0, float A) {
-        this->nE=nE;
-        this->E0=E0;
-        this->E=E;
-        this->nA=nA;
-        this->A0=A0;
-        this->A=A;
-        this->dE = (E-E0)/(nE);
-        this->dA = (A-A0)/(nA);
-        for(int i=0;i<nE;i++)
-        {   this->gridE[i] = E0+i*dE;}
-        
-        for(int i=0;i<nA;i++)
-        {   this->gridA[i] = A0+i*dA;}
 
-      };    
+  void setSurface(int nE, float E0, float E, int nA, float A0, float A) {
+    this->nE = nE;
+    this->E0 = E0;
+    this->E = E;
+    this->nA = nA;
+    this->A0 = A0;
+    this->A = A;
+    this->dE = (E - E0) / (nE);
+    this->dA = (A - A0) / (nA);
+    for (int i = 0; i < nE; i++) {
+      this->gridE[i] = E0 + i * dE;
+    }
+
+    for (int i = 0; i < nA; i++) {
+      this->gridA[i] = A0 + i * dA;
+    }
+  };
 
   CUDA_CALLABLE_MEMBER
-  Surfaces(std::size_t nS,std::size_t nE, std::size_t nA) :
-   energyDistribution{nS*nE*nA,0.0},sputtDistribution{nS*nE*nA,0.0},
-   reflDistribution{nS*nE*nA,0.0}, gridE{nE,0.0}, gridA{nA,0.0},
- sumWeightStrike{nS,0.0}, sumParticlesStrike{nS,0}, grossDeposition{nS,0.0},
-  grossErosion{nS,0.0}, aveSputtYld{nS,0.0}, sputtYldCount{nS,0} {};   
-
+  Surfaces(std::size_t nS, std::size_t nE, std::size_t nA) : energyDistribution{nS * nE * nA, 0.0}, sputtDistribution{nS * nE * nA, 0.0},
+                                                             reflDistribution{nS * nE * nA, 0.0}, gridE{nE, 0.0}, gridA{nA, 0.0},
+                                                             sumWeightStrike{nS, 0.0}, sumParticlesStrike{nS, 0}, grossDeposition{nS, 0.0},
+                                                             grossErosion{nS, 0.0}, aveSputtYld{nS, 0.0}, sputtYldCount{nS, 0} {};
 };
 
 #endif

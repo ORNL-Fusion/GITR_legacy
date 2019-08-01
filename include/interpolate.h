@@ -9,13 +9,13 @@
 #define CUDA_CALLABLE_MEMBER_HOST
 #endif
 
-#ifdef __GNUC__ 
+#ifdef __GNUC__
 #include <stdlib.h>
 #endif
 
-struct interpolate { 
+struct interpolate {
   float value;
-  
+
   interpolate(float v) : value{v} {};
 };
 
