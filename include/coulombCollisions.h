@@ -624,7 +624,7 @@ struct coulombCollisions {
       //particlesPointer->vy[indx] = coeff_Energy*vPartNorm*vUpdate[1]/velocityColl;
       //particlesPointer->vz[indx] = coeff_Energy*vPartNorm*vUpdate[2]/velocityColl;
       //vPartNorm = sqrt(vfx*vfx + vfy*vfy + vfz*vfz);
-      //float vzNew = vz + drag*sgn(parallel_direction[2]);///velocityCollisionsNorm;
+      //float vzNew = vz + drag*std::copysign(1.0,parallel_direction[2]);///velocityCollisionsNorm;
 
       //float vxy0 = sqrt(vx*vx + vy*vy);
       //float vxy = sqrt(vPartNorm*vPartNorm - vzNew*vzNew);

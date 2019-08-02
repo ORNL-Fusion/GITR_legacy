@@ -77,7 +77,7 @@ struct thermalForce {
       interp2dVector(&gradTi[0], p->xprevious[indx], p->yprevious[indx], p->zprevious[indx], nR_gradT, nZ_gradT,
                      gradTGridr, gradTGridz, gradTiR, gradTiZ, gradTiT);
       //std::cout << "Position r z" << sqrt(p->xprevious*p->xprevious + p->yprevious*p->yprevious) << " " << p->zprevious << std::endl;
-      //std::cout << "grad Ti " << sgn(gradTi[0])*sqrt(gradTi[0]*gradTi[0] + gradTi[1]*gradTi[1]) << " " << gradTi[2] << std::endl;
+      //std::cout << "grad Ti " << std::copysign(1.0,gradTi[0])*sqrt(gradTi[0]*gradTi[0] + gradTi[1]*gradTi[1]) << " " << gradTi[2] << std::endl;
       interp2dVector(&gradTe[0], p->xprevious[indx], p->yprevious[indx], p->zprevious[indx], nR_gradT, nZ_gradT,
                      gradTGridr, gradTGridz, gradTeR, gradTeZ, gradTeT);
       mu = p->amu[indx] / (background_amu + p->amu[indx]);
