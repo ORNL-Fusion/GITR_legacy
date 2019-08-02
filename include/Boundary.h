@@ -7,7 +7,7 @@
 #define CUDA_CALLABLE_MEMBER
 #endif
 
-#include "math.h"
+//#include "math.h"
 #include <cstdlib>
 #include <stdio.h>
 //#include <vector>
@@ -83,10 +83,10 @@ public:
   CUDA_CALLABLE_MEMBER
   void getSurfaceParallel(float A[], float y, float x) {
 #if USE3DTETGEOM > 0
-    float norm = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) + (z2 - z1) * (z2 - z1));
+    float norm = std::sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) + (z2 - z1) * (z2 - z1));
     A[1] = (y2 - y1) / norm;
 #else
-    float norm = sqrt((x2 - x1) * (x2 - x1) + (z2 - z1) * (z2 - z1));
+    float norm = std::sqrt((x2 - x1) * (x2 - x1) + (z2 - z1) * (z2 - z1));
     A[1] = 0.0;
 #endif
     //std::cout << "surf par calc " << x2 << " " << x1 << " " << norm << std::endl;
@@ -95,10 +95,10 @@ public:
 #if USE3DTETGEOM > 0
 #else
 #if USECYLSYMM > 0
-    float theta = atan2f(y, x);
+    float theta = std::atan2(y, x);
     float B[3] = {0.0f};
-    B[0] = cosf(theta) * A[0] - sinf(theta) * A[1];
-    B[1] = sinf(theta) * A[0] + cosf(theta) * A[1];
+    B[0] = std::cos(theta) * A[0] - std::sin(theta) * A[1];
+    B[1] = std::sin(theta) * A[0] + std::cos(theta) * A[1];
     A[0] = B[0];
     A[1] = B[1];
 #endif
@@ -116,15 +116,15 @@ public:
     if (slope_dzdx == 0.0) {
       perpSlope = 1.0e12;
     } else {
-      perpSlope = -sgn(slope_dzdx) / abs(slope_dzdx);
+      perpSlope = -sgn(slope_dzdx) / std::abs(slope_dzdx);
     }
-    float Br = 1.0 / sqrt(perpSlope * perpSlope + 1.0);
+    float Br = 1.0 / std::sqrt(perpSlope * perpSlope + 1.0);
     float Bt = 0.0;
-    B[2] = sgn(perpSlope) * sqrt(1 - Br * Br);
+    B[2] = sgn(perpSlope) * std::sqrt(1 - Br * Br);
 #if USECYLSYMM > 0
-    float theta = atan2f(y, x);
-    B[0] = cosf(theta) * Br - sinf(theta) * Bt;
-    B[1] = sinf(theta) * Br + cosf(theta) * Bt;
+    float theta = std::atan2(y, x);
+    B[0] = std::cos(theta) * Br - std::sin(theta) * Bt;
+    B[1] = std::sin(theta) * Br + std::cos(theta) * Bt;
 #else
     B[0] = Br;
     B[1] = Bt;
