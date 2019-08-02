@@ -18,11 +18,6 @@
 #include <boost/timer/timer.hpp>
 using namespace boost::timer;
 #endif
-//template <typename T>
-//CUDA_CALLABLE_MEMBER
-//int sgn(T val) {
-//            return (T(0) < val) - (val < T(0));
-//}
 
 CUDA_CALLABLE_MEMBER
 void vectorAdd(float A[], float B[], float C[]) {
@@ -202,8 +197,8 @@ float getE(float x0, float y, float z, float E[], Boundary *boundaryVector, int 
     //std::cout << "abcd plane_norm "<< a  << " " << b << " " << c << " " << d << " " << plane_norm << std::endl;
     //std::cout << i << std::endl;// " point to plane dist "  << pointToPlaneDistance0 << std::endl;
     //pointToPlaneDistance1 = (a*p1[0] + b*p1[1] + c*p1[2] + d)/plane_norm;
-    //signPoint0 = sgn(pointToPlaneDistance0);
-    //signPoint1 = sgn(pointToPlaneDistance1);
+    //signPoint0 = std::copysign(1.0,pointToPlaneDistance0);
+    //signPoint1 = std::copysign(1.0,pointToPlaneDistance1);
     vectorAssign(a / plane_norm, b / plane_norm, c / plane_norm, normalVector);
     //vectorNormalize(normalVector,normalVector);
     //std::cout << "normal " << normalVector[0] << " " << normalVector[1] << " " << normalVector[2] << std::endl;
@@ -235,9 +230,9 @@ float getE(float x0, float y, float z, float E[], Boundary *boundaryVector, int 
             dot1 = vectorDotProduct(crossBCBp,normalVector);
             dot2 = vectorDotProduct(crossCACp,normalVector);
          */
-    signDot0 = sgn(vectorDotProduct(crossABAp, normalVector));
-    signDot1 = sgn(vectorDotProduct(crossBCBp, normalVector));
-    signDot2 = sgn(vectorDotProduct(crossCACp, normalVector));
+    signDot0 = std::copysign(1.0,vectorDotProduct(crossABAp, normalVector));
+    signDot1 = std::copysign(1.0,vectorDotProduct(crossBCBp, normalVector));
+    signDot2 = std::copysign(1.0,vectorDotProduct(crossCACp, normalVector));
     /*  
          if(dot0 == 0.0) signDot0 = 1;
          if(dot1 == 0.0) signDot1 = 1;
@@ -598,17 +593,17 @@ float getE(float x0, float y, float z, float E[], Boundary *boundaryVector, int 
     if (boundaryVector[minIndex].slope_dzdx == 0) {
       directionUnitVector[0] = 0.0f;
       directionUnitVector[1] = 0.0f;
-      directionUnitVector[2] = 1.0f * sgn(boundaryVector[minIndex].z1 - z);
+      directionUnitVector[2] = 1.0f * std::copysign(1.0,boundaryVector[minIndex].z1 - z);
     } else if (fabsf(boundaryVector[minIndex].slope_dzdx) >= 0.75f * tol) {
 
       directionUnitVector[0] = boundaryVector[minIndex].x1 - x;
       directionUnitVector[1] = 0.0f;
       directionUnitVector[2] = 0.0f;
     } else {
-      directionUnitVector[0] = 1.0f * sgn((z - boundaryVector[minIndex].intercept_z) / (boundaryVector[minIndex].slope_dzdx) - x0);
+      directionUnitVector[0] = 1.0f * std::copysign(1.0,(z - boundaryVector[minIndex].intercept_z) / (boundaryVector[minIndex].slope_dzdx) - x0);
       directionUnitVector[1] = 0.0f;
-      directionUnitVector[2] = 1.0f * sgn(perp_dist) / (boundaryVector[minIndex].slope_dzdx);
-      //std::cout << "sign boundarVec.slope  sign perp_dist " << sgn(boundaryVector[minIndex].slope_dzdx) << " " << sgn(perp_dist) << std::endl;
+      directionUnitVector[2] = 1.0f * std::copysign(1.0,perp_dist) / (boundaryVector[minIndex].slope_dzdx);
+      //std::cout << "sign boundarVec.slope  sign perp_dist " << std::copysign(1.0,boundaryVector[minIndex].slope_dzdx) << " " << std::copysign(1.0,perp_dist) << std::endl;
     }
     //std::cout << "direction_type 1 " << directionUnitVector[0] << " " << directionUnitVector[1] << " " << directionUnitVector[2] << std::endl;
   } else if (direction_type == 2) {
@@ -883,7 +878,7 @@ struct move_boris {
 
       if(abs(v[2]) > vTherm)
       {
-          v[2] = sgn(v[2])*vTherm;
+          v[2] = std::copysign(1.0,v[2])*vTherm;
           v[0] = 0.0;
           v[1] = 0.0;
       }
