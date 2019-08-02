@@ -23,7 +23,7 @@
 #include <random>
 #endif
 template <typename T>
-CUDA_CALLABLE_MEMBER int sgn(T val) {
+CUDA_CALLABLE_MEMBER T sgn(T val) {
   return (T(0) < val) - (val < T(0));
 }
 
