@@ -98,8 +98,8 @@ struct geometry_check {
       float zprev = particlesPointer->zprevious[indx];
       float dpath = std::sqrt((x - xprev) * (x - xprev) + (y - yprev) * (y - yprev) + (z - zprev) * (z - zprev));
 #if FLUX_EA > 0
-      float dEdist = (Edist - E0dist) / nEdist;
-      float dAdist = (Adist - A0dist) / nAdist;
+      float dEdist = (Edist - E0dist) / static_cast<float>(nEdist);
+      float dAdist = (Adist - A0dist) / static_cast<float>(nAdist);
       int AdistInd = 0;
       int EdistInd = 0;
 #endif

@@ -54,14 +54,14 @@ public:
     this->nA = nA;
     this->A0 = A0;
     this->A = A;
-    this->dE = (E - E0) / (nE);
-    this->dA = (A - A0) / (nA);
+    this->dE = (E - E0) / static_cast<float>(nE);
+    this->dA = (A - A0) / static_cast<float>(nA);
     for (int i = 0; i < nE; i++) {
-      this->gridE[i] = E0 + i * dE;
+      this->gridE[i] = E0 + static_cast<float>(i) * dE;
     }
 
     for (int i = 0; i < nA; i++) {
-      this->gridA[i] = A0 + i * dA;
+      this->gridA[i] = A0 + static_cast<float>(i) * dA;
     }
   };
 

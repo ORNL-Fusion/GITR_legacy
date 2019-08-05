@@ -266,8 +266,8 @@ struct reflection {
       float vy = particles->vy[indx];
       float vz = particles->vz[indx];
 #if FLUX_EA > 0
-      float dEdist = (Edist - E0dist) / nEdist;
-      float dAdist = (Adist - A0dist) / nAdist;
+      float dEdist = (Edist - E0dist) / static_cast<float>(nEdist);
+      float dAdist = (Adist - A0dist) / static_cast<float>(nAdist);
       int AdistInd = 0;
       int EdistInd = 0;
 #endif
@@ -529,9 +529,9 @@ struct reflection {
         //  std::cout << "Position of particle0 " << particles->xprevious[indx] << " " << particles->yprevious[indx] << " " << particles->zprevious[indx] << std::endl;
         //  std::cout << "Position of particle " << particles->x[indx] << " " << particles->y[indx] << " " << particles->z[indx] << std::endl;
         //  }
-        particles->vx[indx] = -boundaryVector[wallHit].inDir * surfaceNormalVector[0] * vSampled[0];
-        particles->vy[indx] = -boundaryVector[wallHit].inDir * surfaceNormalVector[1] * vSampled[1];
-        particles->vz[indx] = -boundaryVector[wallHit].inDir * surfaceNormalVector[2] * vSampled[2];
+        particles->vx[indx] = -static_cast<float>(boundaryVector[wallHit].inDir) * surfaceNormalVector[0] * vSampled[0];
+        particles->vy[indx] = -static_cast<float>(boundaryVector[wallHit].inDir) * surfaceNormalVector[1] * vSampled[1];
+        particles->vz[indx] = -static_cast<float>(boundaryVector[wallHit].inDir) * surfaceNormalVector[2] * vSampled[2];
         //        //if(particles->test[indx] == 0.0)
         //        //{
         //        //    particles->test[indx] = 1.0;
@@ -541,9 +541,9 @@ struct reflection {
         //        //    particles->test3[indx] = vSampled[2];
         //        //}
 
-        particles->xprevious[indx] = particles->x[indx] - boundaryVector[wallHit].inDir * surfaceNormalVector[0] * 1e-4;
-        particles->yprevious[indx] = particles->y[indx] - boundaryVector[wallHit].inDir * surfaceNormalVector[1] * 1e-4;
-        particles->zprevious[indx] = particles->z[indx] - boundaryVector[wallHit].inDir * surfaceNormalVector[2] * 1e-4;
+        particles->xprevious[indx] = particles->x[indx] - static_cast<float>(boundaryVector[wallHit].inDir) * surfaceNormalVector[0] * 1e-4;
+        particles->yprevious[indx] = particles->y[indx] - static_cast<float>(boundaryVector[wallHit].inDir) * surfaceNormalVector[1] * 1e-4;
+      particles->zprevious[indx] = particles->z[indx] - static_cast<float>(boundaryVector[wallHit].inDir) * surfaceNormalVector[2] * 1e-4;
         //std::cout << "New vel " << particles->vx[indx] << " " << particles->vy[indx] << " " << particles->vz[indx] << std::endl;
         //std::cout << "New pos " << particles->xprevious[indx] << " " << particles->yprevious[indx] << " " << particles->zprevious[indx] << std::endl;
         //if(particles->test[indx] == 0.0)
