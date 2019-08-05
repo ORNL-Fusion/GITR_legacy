@@ -8,8 +8,7 @@
 #endif
 #include "Boundary.h"
 #include "Particles.h"
-//#include <cmath>
-#include "math.h"
+#include <cmath>
 
 struct field_line_trace {
   float BfieldFactor;
@@ -111,12 +110,12 @@ struct field_line_trace {
       //particles->z[indx] = particles->zprevious[indx] + BfieldFactor*dr*Bnorm[2];
       particles->distanceTraveled[indx] = particles->distanceTraveled[indx] + dr;
     } else if (particles->hitWall[indx] == 1.0) {
-      particleDistance = sqrtf((particles->x[indx] - particles->xprevious[indx]) *
-                                   (particles->x[indx] - particles->xprevious[indx]) +
-                               (particles->y[indx] - particles->yprevious[indx]) *
-                                   (particles->y[indx] - particles->yprevious[indx]) +
-                               (particles->z[indx] - particles->zprevious[indx]) *
-                                   (particles->z[indx] - particles->zprevious[indx]));
+      particleDistance = std::sqrt((particles->x[indx] - particles->xprevious[indx]) *
+                                       (particles->x[indx] - particles->xprevious[indx]) +
+                                   (particles->y[indx] - particles->yprevious[indx]) *
+                                       (particles->y[indx] - particles->yprevious[indx]) +
+                                   (particles->z[indx] - particles->zprevious[indx]) *
+                                       (particles->z[indx] - particles->zprevious[indx]));
 
       particles->distanceTraveled[indx] = particles->distanceTraveled[indx] + particleDistance;
       particles->hitWall[indx] = particles->hitWall[indx] + 1.0;

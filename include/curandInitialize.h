@@ -11,7 +11,6 @@
 #include <boost/random.hpp>
 #include <cstdlib>
 #include <iostream>
-#include <stdlib.h>
 
 struct curandInitialize {
 #if __CUDACC__

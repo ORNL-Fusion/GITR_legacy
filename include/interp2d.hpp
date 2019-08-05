@@ -9,10 +9,9 @@
 #define CUDA_CALLABLE_MEMBER_DEVICE
 #endif
 
-#include "math.h"
-#include <thrust/device_vector.h>
-#include <vector>
-//using namespace std;
+//#include <thrust/device_vector.h>
+//#include <vector>
+
 CUDA_CALLABLE_MEMBER
 
 float interp2d(float x, float z, int nx, int nz,

@@ -10,12 +10,10 @@
 #endif
 
 #include "Particles.h"
-#include "math.h"
 #ifdef __CUDACC__
 #include <thrust/random.h>
 #else
 #include <random>
-#include <stdlib.h>
 #endif
 
 struct parDiffusion {

@@ -12,15 +12,12 @@
 #include "Boundary.h"
 #include "Particles.h"
 #include "Surfaces.h"
-//#include <cmath>
-
-#include "math.h"
+#include <cmath>
 
 #ifdef __CUDACC__
 #include <thrust/random.h>
 #else
 #include <random>
-#include <stdlib.h>
 #endif
 CUDA_CALLABLE_MEMBER
 void getBoundaryNormal(Boundary *boundaryVector, int wallIndex, float surfaceNormalVector[], float x, float y) {
@@ -45,14 +42,14 @@ void getBoundaryNormal(Boundary *boundaryVector, int wallIndex, float surfaceNor
     surfaceNormalVector[0] = 1.0f;
     surfaceNormalVector[1] = 0.0f;
     surfaceNormalVector[2] = -1.0f / (boundaryVector[wallIndex].slope_dzdx);
-    norm_normal = sqrt(surfaceNormalVector[2] * surfaceNormalVector[2] + 1.0);
+    norm_normal = std::sqrt(surfaceNormalVector[2] * surfaceNormalVector[2] + 1.0);
     surfaceNormalVector[0] = surfaceNormalVector[0] / norm_normal;
     surfaceNormalVector[1] = surfaceNormalVector[1] / norm_normal;
 
     surfaceNormalVector[2] = surfaceNormalVector[2] / norm_normal;
   }
 #if USECYLSYMM > 0
-  float theta = atan2f(y, x);
+  float theta = std::atan2(y, x);
   float Sr = surfaceNormalVector[0];
   surfaceNormalVector[0] = cosf(theta) * Sr;
   surfaceNormalVector[1] = sinf(theta) * Sr;
@@ -64,7 +61,7 @@ double screeningLength(double Zprojectile, double Ztarget) {
   double bohrRadius = 5.29177e-11;
   double screenLength;
 
-  screenLength = 0.885341 * bohrRadius * powf(powf(Zprojectile, (2 / 3)) + powf(Ztarget, (2 / 3)), (-1 / 2));
+  screenLength = 0.885341 * bohrRadius * std::pow(std::pow(Zprojectile, (2 / 3)) + std::pow(Ztarget, (2 / 3)), (-1 / 2));
 
   return screenLength;
 }
@@ -79,7 +76,7 @@ double stoppingPower(Particles *particles, int indx, double Mtarget, double Ztar
 
   E0 = 0.5 * particles->amu[indx] * 1.6737236e-27 * (particles->vx[indx] * particles->vx[indx] + particles->vy[indx] * particles->vy[indx] + particles->vz[indx] * particles->vz[indx]) / Q;
   reducedEnergy = E0 * (Mtarget / (particles->amu[indx] + Mtarget)) * (screenLength / (particles->Z[indx] * Ztarget * ke2));
-  stoppingPower = 0.5 * log(1.0 + 1.2288 * reducedEnergy) / (reducedEnergy + 0.1728 * sqrt(reducedEnergy) + 0.008 * pow(reducedEnergy, 0.1504));
+  stoppingPower = 0.5 * log(1.0 + 1.2288 * reducedEnergy) / (reducedEnergy + 0.1728 * std::sqrt(reducedEnergy) + 0.008 * pow(reducedEnergy, 0.1504));
 
   return stoppingPower;
 }
@@ -107,7 +104,7 @@ struct erosion {
     screenLength = screeningLength(particles->Z[indx], Ztarget);
     stopPower = stoppingPower(particles, indx, Mtarget, Ztarget, screenLength);
     E0 = 0.5 * particles->amu[indx] * 1.6737236e-27 * (particles->vx[indx] * particles->vx[indx] + particles->vy[indx] * particles->vy[indx] + particles->vz[indx] * particles->vz[indx]) / 1.60217662e-19;
-    term = pow((E0 / Eth - 1), mu);
+    term = std::pow((E0 / Eth - 1), mu);
     Y0 = q * stopPower * term / (lambda + term);
   }
 };
@@ -269,7 +266,7 @@ struct reflection {
       particleTrackVector[0] = vx;
       particleTrackVector[1] = vy;
       particleTrackVector[2] = vz;
-      norm_part = sqrt(particleTrackVector[0] * particleTrackVector[0] + particleTrackVector[1] * particleTrackVector[1] + particleTrackVector[2] * particleTrackVector[2]);
+      norm_part = std::sqrt(particleTrackVector[0] * particleTrackVector[0] + particleTrackVector[1] * particleTrackVector[1] + particleTrackVector[2] * particleTrackVector[2]);
       E0 = 0.5 * particles->amu[indx] * 1.6737236e-27 * (norm_part * norm_part) / 1.60217662e-19;
       if (E0 > 1000.0)
         E0 = 990.0;
@@ -290,7 +287,7 @@ struct reflection {
       thetaImpact = thetaImpact * 180.0 / 3.14159265359;
       if (thetaImpact < 0.0)
         thetaImpact = 0.0;
-      signPartDotNormal = std::copysign(1.0,partDotNormal);
+      signPartDotNormal = std::copysign(1.0, partDotNormal);
       if (E0 == 0.0) {
         thetaImpact = 0.0;
       }
@@ -504,13 +501,13 @@ struct reflection {
         particles->weight[indx] = newWeight;
         particles->hitWall[indx] = 0.0;
         particles->charge[indx] = 0.0;
-        float V0 = sqrt(2 * eInterpVal * 1.602e-19 / (particles->amu[indx] * 1.66e-27));
+        float V0 = std::sqrt(2 * eInterpVal * 1.602e-19 / (particles->amu[indx] * 1.66e-27));
         particles->newVelocity[indx] = V0;
         vSampled[0] = V0 * sin(aInterpVal * 3.1415 / 180) * cos(2.0 * 3.1415 * r10);
         vSampled[1] = V0 * sin(aInterpVal * 3.1415 / 180) * sin(2.0 * 3.1415 * r10);
         vSampled[2] = V0 * cos(aInterpVal * 3.1415 / 180);
         boundaryVector[wallHit].transformToSurface(vSampled, particles->y[indx], particles->x[indx]);
-        //float rr = sqrt(particles->x[indx]*particles->x[indx] + particles->y[indx]*particles->y[indx]);
+        //float rr = std::sqrt(particles->x[indx]*particles->x[indx] + particles->y[indx]*particles->y[indx]);
         //if (particles->z[indx] < -4.1 && -signPartDotNormal*vSampled[0] > 0.0)
         //{
         //  std::cout << "particle index " << indx  << std::endl;

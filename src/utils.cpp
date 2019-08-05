@@ -13,8 +13,8 @@
 #include <string>
 
 #if USE_BOOST
-#include "boost/multi_array.hpp"
 #include "boost/filesystem.hpp"
+#include "boost/multi_array.hpp"
 #endif
 #ifdef __CUDACC__
 #include <thrust/host_vector.h>

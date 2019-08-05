@@ -230,9 +230,9 @@ float getE(float x0, float y, float z, float E[], Boundary *boundaryVector, int 
             dot1 = vectorDotProduct(crossBCBp,normalVector);
             dot2 = vectorDotProduct(crossCACp,normalVector);
          */
-    signDot0 = std::copysign(1.0,vectorDotProduct(crossABAp, normalVector));
-    signDot1 = std::copysign(1.0,vectorDotProduct(crossBCBp, normalVector));
-    signDot2 = std::copysign(1.0,vectorDotProduct(crossCACp, normalVector));
+    signDot0 = std::copysign(1.0, vectorDotProduct(crossABAp, normalVector));
+    signDot1 = std::copysign(1.0, vectorDotProduct(crossBCBp, normalVector));
+    signDot2 = std::copysign(1.0, vectorDotProduct(crossCACp, normalVector));
     /*  
          if(dot0 == 0.0) signDot0 = 1;
          if(dot1 == 0.0) signDot1 = 1;
@@ -593,16 +593,16 @@ float getE(float x0, float y, float z, float E[], Boundary *boundaryVector, int 
     if (boundaryVector[minIndex].slope_dzdx == 0) {
       directionUnitVector[0] = 0.0f;
       directionUnitVector[1] = 0.0f;
-      directionUnitVector[2] = 1.0f * std::copysign(1.0,boundaryVector[minIndex].z1 - z);
+      directionUnitVector[2] = 1.0f * std::copysign(1.0, boundaryVector[minIndex].z1 - z);
     } else if (fabsf(boundaryVector[minIndex].slope_dzdx) >= 0.75f * tol) {
 
       directionUnitVector[0] = boundaryVector[minIndex].x1 - x;
       directionUnitVector[1] = 0.0f;
       directionUnitVector[2] = 0.0f;
     } else {
-      directionUnitVector[0] = 1.0f * std::copysign(1.0,(z - boundaryVector[minIndex].intercept_z) / (boundaryVector[minIndex].slope_dzdx) - x0);
+      directionUnitVector[0] = 1.0f * std::copysign(1.0, (z - boundaryVector[minIndex].intercept_z) / (boundaryVector[minIndex].slope_dzdx) - x0);
       directionUnitVector[1] = 0.0f;
-      directionUnitVector[2] = 1.0f * std::copysign(1.0,perp_dist) / (boundaryVector[minIndex].slope_dzdx);
+      directionUnitVector[2] = 1.0f * std::copysign(1.0, perp_dist) / (boundaryVector[minIndex].slope_dzdx);
       //std::cout << "sign boundarVec.slope  sign perp_dist " << std::copysign(1.0,boundaryVector[minIndex].slope_dzdx) << " " << std::copysign(1.0,perp_dist) << std::endl;
     }
     //std::cout << "direction_type 1 " << directionUnitVector[0] << " " << directionUnitVector[1] << " " << directionUnitVector[2] << std::endl;
