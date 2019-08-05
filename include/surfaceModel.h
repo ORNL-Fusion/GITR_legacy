@@ -185,9 +185,13 @@ struct reflection {
              float _Edist,
              int _nAdist,
              float _A0dist,
-             float _Adist) : particles(_particles), dt(_dt), state(_state), nLines(_nLines), boundaryVector(_boundaryVector),
+             float _Adist) : particles(_particles),
+                             dt(_dt),
+                             nLines(_nLines),
+                             boundaryVector(_boundaryVector),
                              surfaces(_surfaces),
-                             nE_sputtRefCoeff(_nE_sputtRefCoeff), nA_sputtRefCoeff(_nA_sputtRefCoeff),
+                             nE_sputtRefCoeff(_nE_sputtRefCoeff),
+                             nA_sputtRefCoeff(_nA_sputtRefCoeff),
                              A_sputtRefCoeff(_A_sputtRefCoeff),
                              Elog_sputtRefCoeff(_Elog_sputtRefCoeff),
                              spyl_surfaceModel(_spyl_surfaceModel),
@@ -209,8 +213,13 @@ struct reflection {
                              ADist_CDF_Y_regrid(_ADist_CDF_Y_regrid),
                              EDist_CDF_R_regrid(_EDist_CDF_R_regrid),
                              ADist_CDF_R_regrid(_ADist_CDF_R_regrid),
-                             nEdist(_nEdist), E0dist(_E0dist), Edist(_Edist),
-                             nAdist(_nAdist), A0dist(_A0dist), Adist(_Adist) {
+                             nEdist(_nEdist),
+                             E0dist(_E0dist),
+                             Edist(_Edist),
+                             nAdist(_nAdist),
+                             A0dist(_A0dist),
+                             Adist(_Adist),
+                             state(_state) {
   }
 
   CUDA_CALLABLE_MEMBER_DEVICE

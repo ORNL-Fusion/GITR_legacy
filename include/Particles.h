@@ -10,7 +10,6 @@
 #include "array.h"
 #include <cmath>
 #include <cstdlib>
-#include <stdio.h>
 
 #ifdef __CUDACC__
 #include <curand_kernel.h>
@@ -211,17 +210,50 @@ public:
     this->firstIonizationT[n] = firstIonizationTT;
   };
   CUDA_CALLABLE_MEMBER
-  Particles(std::size_t nP) : nParticles{nP}, index{nP, 0}, x{nP}, y{nP}, z{nP}, xprevious{nP}, yprevious{nP}, zprevious{nP},
-                              vx{nP}, vy{nP}, vz{nP}, v{nP, 0.0}, Z{nP}, amu{nP}, charge{nP}, newVelocity{nP}, nu_s{nP}, vD{nP, 0.0},
+  Particles(std::size_t nP) : nParticles{nP},
+                              index{nP, 0},
+                              x{nP},
+                              y{nP},
+                              z{nP},
+                              xprevious{nP},
+                              yprevious{nP},
+                              zprevious{nP},
+                              v{nP, 0.0},
+                              vx{nP},
+                              vy{nP},
+                              vz{nP},
+                              Z{nP},
+                              amu{nP},
+                              charge{nP},
+                              newVelocity{nP},
+                              nu_s{nP},
+                              vD{nP, 0.0},
+                              tt{nP, 0},
+                              hasLeaked{nP, 0},
+                              leakZ{nP, 0.0},
 #if PARTICLESEEDS > 0
 //    streams{nP},streams_rec{nP},streams_collision1{nP},streams_collision2{nP},
 //    streams_collision3{nP},streams_diff{nP},streams_surf{nP},
 #endif
                               hitWall{nP, 0.0},
-                              transitTime{nP, 0.0}, distTraveled{nP, 0.0},
-                              wallHit{nP, 0}, firstCollision{nP, 1}, wallIndex{nP}, perpDistanceToSurface{nP},
-                              test{nP, 0.0}, test0{nP, 0.0}, test1{nP, 0.0}, test2{nP, 0.0}, test3{nP, 0.0}, test4{nP, 0.0}, distanceTraveled{nP}, weight{nP, 1.0}, PionizationPrevious{nP, 1.0},
-                              PrecombinationPrevious{nP, 1.0}, firstIonizationZ{nP, 0.0}, firstIonizationT{nP, 0.0}, tt{nP, 0}, hasLeaked{nP, 0}, leakZ{nP, 0.0} {};
+                              wallHit{nP, 0},
+                              firstCollision{nP, 1},
+                              transitTime{nP, 0.0},
+                              distTraveled{nP, 0.0},
+                              wallIndex{nP},
+                              perpDistanceToSurface{nP},
+                              test{nP, 0.0},
+                              test0{nP, 0.0},
+                              test1{nP, 0.0},
+                              test2{nP, 0.0},
+                              test3{nP, 0.0},
+                              test4{nP, 0.0},
+                              distanceTraveled{nP},
+                              weight{nP, 1.0},
+                              PionizationPrevious{nP, 1.0},
+                              PrecombinationPrevious{nP, 1.0},
+                              firstIonizationZ{nP, 0.0},
+                              firstIonizationT{nP, 0.0} {};
 };
 
 #endif
