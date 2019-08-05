@@ -106,9 +106,9 @@ public:
     this->hitWall[indx] = 0.0;
     this->wallIndex[indx] = 0;
     //        float Ex,Ey,Ez;
-    //        Ex = E*cos(theta)*sin(phi);
-    //        Ey = E*sin(theta)*sin(phi);
-    //        Ez = E*cos(phi);
+    //        Ex = E*std::cos(theta)*std::sin(phi);
+    //        Ey = E*std::sin(theta)*std::sin(phi);
+    //        Ez = E*std::cos(phi);
     this->vx[indx] = Ex / std::abs(Ex) * std::sqrt(2.0 * std::abs(Ex) * 1.60217662e-19 / (amu * 1.6737236e-27));
     this->vy[indx] = Ey / std::abs(Ey) * std::sqrt(2.0 * std::abs(Ey) * 1.60217662e-19 / (amu * 1.6737236e-27));
     this->vz[indx] = Ez / std::abs(Ez) * std::sqrt(2.0 * std::abs(Ez) * 1.60217662e-19 / (amu * 1.6737236e-27));

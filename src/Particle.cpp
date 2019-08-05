@@ -88,7 +88,7 @@ void Particle::Ionization(double dt) {
   double Coeffs[10] = {3.0875e-13, 9.6970e-14, 3.8631e-14, 2.0649e-14, 3.5021e-15, 1.6037e-15, 7.0230e-17, 1.7442e-17, 6.1966e-18, 1.8790e-18};
   double density = 1e19;
   double Temp_eV = 20;
-  tion = 1 / (Coeffs[int(floor(Z + 0.5f))] * density);
+  tion = 1 / (Coeffs[int(std::floor(Z + 0.5f))] * density);
 
   P1 = 1 - exp(-dt / tion);
 

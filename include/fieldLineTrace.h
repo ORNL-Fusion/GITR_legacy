@@ -73,7 +73,7 @@ struct field_line_trace {
                      BfieldR, BfieldZ, BfieldT);
       //std::cout << "Bfield interp " << B[0] << " " << B[1] << " " << B[2] << std::endl;
       vectorNormalize(B, B);
-      //Bmag = sqrtf(B[0]*B[0] + B[1]*B[1] + B[2]*B[2]);
+      //Bmag = std::sqrt(B[0]*B[0] + B[1]*B[1] + B[2]*B[2]);
       //Bnorm[0] = B[0]/Bmag;
       //Bnorm[1] = B[1]/Bmag;
       //Bnorm[2] = B[2]/Bmag;

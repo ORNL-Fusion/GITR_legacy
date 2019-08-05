@@ -136,7 +136,7 @@ struct parDiffusion {
                      flowVGridr, flowVGridz, flowVr, flowVz, flowVt);
 #endif
 #endif
-      vPartNorm = sqrt(vx * vx + vy * vy + vz * vz);
+      vPartNorm = std::sqrt(vx * vx + vy * vy + vz * vz);
       relativeVelocity[0] = vx - flowVelocity[0];
       relativeVelocity[1] = vy - flowVelocity[1];
       relativeVelocity[2] = vz - flowVelocity[2];
@@ -146,12 +146,12 @@ struct parDiffusion {
 #if PARTICLESEEDS > 0
 #ifdef __CUDACC__
       float n1 = curand_normal(&state[indx]);
-      float r1 = 2.0 * floor(curand_uniform(&state[indx]) + 0.5) - 1.0;
+      float r1 = 2.0 * std::floor(curand_uniform(&state[indx]) + 0.5) - 1.0;
 #else
       std::normal_distribution<double> distribution(0.0, 1.0);
       float n1 = distribution(state[indx]);
       std::uniform_real_distribution<float> dist(0.0, 1.0);
-      float r1 = 2.0 * floor(dist(state[indx]) + 0.5) - 1.0;
+      float r1 = 2.0 * std::floor(dist(state[indx]) + 0.5) - 1.0;
 //float r1 = dist(state[indx]) - 0.5;
 #endif
 #else
@@ -182,7 +182,7 @@ struct parDiffusion {
                      nR_Bfield, nZ_Bfield,
                      BfieldGridR, BfieldGridZ, BfieldR, BfieldZ, BfieldT);
       float ti_eV = interp2dCombined(x, y, z, nR_Temp, nZ_Temp, TempGridr, TempGridz, ti);
-      float vTherm = sqrt(ti_eV * 1.602e-19 / particlesPointer->amu[indx] / 1.66e-27);
+      float vTherm = std::sqrt(ti_eV * 1.602e-19 / particlesPointer->amu[indx] / 1.66e-27);
       float Dpar = vTherm * vTherm / nu_friction;
       //std::cout << "vTherm " << vTherm << endl;
       //std::cout << "nu_friction " << nu_friction << endl;
@@ -197,13 +197,13 @@ struct parDiffusion {
       if (nu_friction == 0.0) {
         Dpar = 0.0;
       }
-      //particlesPointer->x[indx] = particlesPointer->xprevious[indx] + r1*sqrt(Dpar*dt)*parallel_direction[0];
-      //particlesPointer->y[indx] = particlesPointer->yprevious[indx] + r1*sqrt(Dpar*dt)*parallel_direction[1];
-      //particlesPointer->z[indx] = particlesPointer->zprevious[indx] + r1*sqrt(Dpar*dt)*parallel_direction[2];
+      //particlesPointer->x[indx] = particlesPointer->xprevious[indx] + r1*std::sqrt(Dpar*dt)*parallel_direction[0];
+      //particlesPointer->y[indx] = particlesPointer->yprevious[indx] + r1*std::sqrt(Dpar*dt)*parallel_direction[1];
+      //particlesPointer->z[indx] = particlesPointer->zprevious[indx] + r1*std::sqrt(Dpar*dt)*parallel_direction[2];
       particlesPointer->x[indx] = particlesPointer->xprevious[indx] + n1 * 1.4142 * vTherm * dt * parallel_direction[0];
       particlesPointer->y[indx] = particlesPointer->yprevious[indx] + n1 * 1.4142 * vTherm * dt * parallel_direction[1];
       particlesPointer->z[indx] = particlesPointer->zprevious[indx] + n1 * 1.4142 * vTherm * dt * parallel_direction[2];
-      //std::cout << "Dpar distance " << r1*sqrt(Dpar*dt) << endl;
+      //std::cout << "Dpar distance " << r1*std::sqrt(Dpar*dt) << endl;
     }
   }
 };

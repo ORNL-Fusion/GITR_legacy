@@ -131,23 +131,23 @@ struct geometry_check {
         float vx0 = 0.0;
         float vy0 = 0.0;
         if (theta <= boundaryVector[nLines].y1) {
-          particlesPointer->xprevious[indx] = r * cos(boundaryVector[nLines].y2 + theta);
-          particlesPointer->yprevious[indx] = r * sin(boundaryVector[nLines].y2 + theta);
-          particlesPointer->x[indx] = rprev * cos(boundaryVector[nLines].y2 + theta);
-          particlesPointer->y[indx] = rprev * sin(boundaryVector[nLines].y2 + theta);
+          particlesPointer->xprevious[indx] = r * std::cos(boundaryVector[nLines].y2 + theta);
+          particlesPointer->yprevious[indx] = r * std::sin(boundaryVector[nLines].y2 + theta);
+          particlesPointer->x[indx] = rprev * std::cos(boundaryVector[nLines].y2 + theta);
+          particlesPointer->y[indx] = rprev * std::sin(boundaryVector[nLines].y2 + theta);
 
-          vx0 = vrMag * cos(boundaryVector[nLines].y2 + theta) - vthetaMag * sin(boundaryVector[nLines].y2 + theta);
-          vy0 = vrMag * sin(boundaryVector[nLines].y2 + theta) + vthetaMag * cos(boundaryVector[nLines].y2 + theta);
+          vx0 = vrMag * std::cos(boundaryVector[nLines].y2 + theta) - vthetaMag * std::sin(boundaryVector[nLines].y2 + theta);
+          vy0 = vrMag * std::sin(boundaryVector[nLines].y2 + theta) + vthetaMag * std::cos(boundaryVector[nLines].y2 + theta);
           particlesPointer->vx[indx] = vx0;
           particlesPointer->vy[indx] = vy0;
         } else if (theta >= boundaryVector[nLines].y2) {
-          particlesPointer->xprevious[indx] = rprev * cos(thetaPrev - boundaryVector[nLines].y2);
-          particlesPointer->yprevious[indx] = rprev * sin(thetaPrev - boundaryVector[nLines].y2);
-          particlesPointer->x[indx] = r * cos(theta - boundaryVector[nLines].y2);
-          particlesPointer->y[indx] = r * sin(theta - boundaryVector[nLines].y2);
+          particlesPointer->xprevious[indx] = rprev * std::cos(thetaPrev - boundaryVector[nLines].y2);
+          particlesPointer->yprevious[indx] = rprev * std::sin(thetaPrev - boundaryVector[nLines].y2);
+          particlesPointer->x[indx] = r * std::cos(theta - boundaryVector[nLines].y2);
+          particlesPointer->y[indx] = r * std::sin(theta - boundaryVector[nLines].y2);
 
-          vx0 = vrMag * cos(theta - boundaryVector[nLines].y2) - vthetaMag * sin(theta - boundaryVector[nLines].y2);
-          vy0 = vrMag * sin(theta - boundaryVector[nLines].y2) + vthetaMag * cos(theta - boundaryVector[nLines].y2);
+          vx0 = vrMag * std::cos(theta - boundaryVector[nLines].y2) - vthetaMag * std::sin(theta - boundaryVector[nLines].y2);
+          vy0 = vrMag * std::sin(theta - boundaryVector[nLines].y2) + vthetaMag * std::cos(theta - boundaryVector[nLines].y2);
           particlesPointer->vx[indx] = vx0;
           particlesPointer->vy[indx] = vy0;
         }
@@ -267,10 +267,10 @@ struct geometry_check {
       float dr = closeGeomGridr[rHashInd + 1] - closeGeomGridr[rHashInd];
       float dz = closeGeomGridz[zHashInd + 1] - closeGeomGridz[zHashInd];
       float dy = closeGeomGridy[yHashInd + 1] - closeGeomGridy[yHashInd];
-      int rInd = floor((r_position - closeGeomGridr[rHashInd]) / dr + 0.5f);
-      int zInd = floor((particlesPointer->zprevious[indx] - closeGeomGridz[zHashInd]) / dz + 0.5f);
+      int rInd = std::floor((r_position - closeGeomGridr[rHashInd]) / dr + 0.5f);
+      int zInd = std::floor((particlesPointer->zprevious[indx] - closeGeomGridz[zHashInd]) / dz + 0.5f);
       int i = 0;
-      int yInd = floor((particlesPointer->yprevious[indx] - closeGeomGridy[yHashInd]) / dy + 0.5f);
+      int yInd = std::floor((particlesPointer->yprevious[indx] - closeGeomGridy[yHashInd]) / dy + 0.5f);
       //std::cout << "rHashInd " << rHashInd << " " << yHashInd << " " << zHashInd << std::endl;
       //std::cout << "dr dy dz " << dr << " " << dy << " " << dz << std::endl;
       //std::cout << "rind y z " << rInd << " " << yInd << " " << zInd << std::endl;
@@ -394,13 +394,13 @@ struct geometry_check {
 //getBoundaryNormal(boundaryVector,i,surfNormal,particlesPointer->x[indx],particlesPointer->y[indx]);
 //vectorNormalize(partNormal,partNormal);
 //partDotNormal = vectorDotProduct(partNormal,surfNormal);
-//float thetaImpact = acos(partDotNormal)*180.0/3.1415;
+//float thetaImpact = std::acos(partDotNormal)*180.0/3.1415;
 //if(E0 < surfaces->E && E0> surfaces->E0)
 //{
-//    int tally_index = floor((E0-surfaces->E0)/surfaces->dE);
+//    int tally_index = std::floor((E0-surfaces->E0)/surfaces->dE);
 //    if(thetaImpact > surfaces->A0 && thetaImpact < surfaces->A)
 //    {
-//        int aTally = floor((thetaImpact-surfaces->A0)/surfaces->dA);
+//        int aTally = std::floor((thetaImpact-surfaces->A0)/surfaces->dA);
 //        atomicAdd(&surfaces->energyDistribution[i*surfaces->nE*surfaces->nA+ aTally*surfaces->nE + tally_index], particlesPointer->weight[indx]);
 //    }
 //}
@@ -457,8 +457,8 @@ struct geometry_check {
 #endif
       float dr = closeGeomGridr[1] - closeGeomGridr[0];
       float dz = closeGeomGridz[1] - closeGeomGridz[0];
-      int rInd = floor((r_position - closeGeomGridr[0]) / dr + 0.5f);
-      int zInd = floor((particlesPointer->zprevious[indx] - closeGeomGridz[0]) / dz + 0.5f);
+      int rInd = std::floor((r_position - closeGeomGridr[0]) / dr + 0.5f);
+      int zInd = std::floor((particlesPointer->zprevious[indx] - closeGeomGridz[0]) / dz + 0.5f);
       if (rInd < 0 || rInd >= nR_closeGeom[0])
         rInd = 0;
       if (zInd < 0 || zInd >= nZ_closeGeom[0])
@@ -630,10 +630,10 @@ struct geometry_check {
         particlesPointer->hitWall[indx] = 1.0f;
 #if USECYLSYMM > 0
         thetaNew = theta0 + (intersectionx[minDistInd] - pdim1previous) / (pdim1 - pdim1previous) * (theta1 - theta0);
-        particlesPointer->yprevious[indx] = intersectionx[minDistInd] * sinf(thetaNew);
+        particlesPointer->yprevious[indx] = intersectionx[minDistInd] * std::sin(thetaNew);
         particlesPointer->y[indx] = particlesPointer->yprevious[indx];
-        //particlesPointer->y[indx] = intersectionx[minDistInd]*cosf(thetaNew);
-        particlesPointer->x[indx] = intersectionx[minDistInd] * cosf(thetaNew);
+        //particlesPointer->y[indx] = intersectionx[minDistInd]*std::cos(thetaNew);
+        particlesPointer->x[indx] = intersectionx[minDistInd] * std::cos(thetaNew);
 #else
         //std::cout << "Particle index " << indx << " hit wall and is calculating y point " << particlesPointer->yprevious[indx] << " " << particlesPointer->y[indx] << std::endl;
         //particlesPointer->y[indx] = particlesPointer->yprevious[indx] + (intersectionx[minDistInd] - pdim1previous)/(pdim1 - pdim1previous)*(particlesPointer->y[indx] - particlesPointer->yprevious[indx]);
@@ -678,13 +678,13 @@ struct geometry_check {
         particleTrackVector[2] = particleTrackVector[2] / norm_part;
 
         partDotNormal = vectorDotProduct(particleTrackVector, surfaceNormalVector);
-        thetaImpact = acos(partDotNormal);
+        thetaImpact = std::acos(partDotNormal);
         if (thetaImpact > 3.14159265359 * 0.5) {
           thetaImpact = std::abs(thetaImpact - (3.14159265359));
         }
         thetaImpact = thetaImpact * 180.0 / 3.14159265359;
-        EdistInd = floor((E0 - E0dist) / dEdist);
-        AdistInd = floor((thetaImpact - A0dist) / dAdist);
+        EdistInd = std::floor((E0 - E0dist) / dEdist);
+        AdistInd = std::floor((thetaImpact - A0dist) / dAdist);
         int surfaceHit = boundaryVector[particlesPointer->wallHit[indx]].surfaceNumber;
         int surface = boundaryVector[particlesPointer->wallHit[indx]].surface;
         float weight = particlesPointer->weight[indx];
