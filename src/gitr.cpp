@@ -2283,6 +2283,7 @@ int main(int argc, char **argv, char **envp) {
   float thisE0[3] = {0.0, 0.0, 0.0};
   float minDist0 = 0.0;
   int minInd_bnd = 0;
+  float density_fraction = 0;
   for (int i = 0; i < 1000; i++) {
       minDist0 =
           getE(0.0, 0.0, 1.0E-6*i, thisE0, boundaries.data(),
@@ -2290,8 +2291,9 @@ int main(int argc, char **argv, char **envp) {
                nR_closeGeom_sheath, nY_closeGeom_sheath, nZ_closeGeom_sheath,
                n_closeGeomElements_sheath, &closeGeomGridr_sheath.front(),
                &closeGeomGridy_sheath.front(), &closeGeomGridz_sheath.front(),
-               &closeGeom_sheath.front(), minInd_bnd);
+               &closeGeom_sheath.front(), minInd_bnd, density_fraction);
       //std::cout << "Efield rzt " << thisE0[0] << " " << thisE0[1] << " " << thisE0[2] << std::endl;
+      std::cout << "z = " << 1.0E-6*i << " density_fraction =  " << density_fraction << std::endl;
   }
 #if EFIELD_INTERP == 1
   float thisE[3] = {0.0, 0.0, 0.0};
@@ -4029,7 +4031,7 @@ int main(int argc, char **argv, char **envp) {
 #if USE_SORT > 0
       thrust::for_each(thrust::device, tmpInt.begin(), tmpInt.end(), sort0);
 #ifdef __CUDACC__
-      cudaDeviceSynchronize();
+      //cudaDeviceSynchronize();
 #endif
 #endif
 
@@ -4476,7 +4478,7 @@ std::cout << "bound 255 " << boundaries[255].impacts << std::endl;
                nR_closeGeom_sheath, nY_closeGeom_sheath, nZ_closeGeom_sheath,
                n_closeGeomElements_sheath, &closeGeomGridr_sheath.front(),
                &closeGeomGridy_sheath.front(), &closeGeomGridz_sheath.front(),
-               &closeGeom_sheath.front(), closestBoundaryIndex);
+               &closeGeom_sheath.front(), closestBoundaryIndex, density_fraction);
       
       if (boundaries[closestBoundaryIndex].Z > 0.0) {
         surfIndex = boundaries[closestBoundaryIndex].surfaceNumber;

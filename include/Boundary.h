@@ -76,6 +76,7 @@ class Boundary
     float startingParticles;
     float impacts;
     float redeposit;
+    float lambda;
 
     CUDA_CALLABLE_MEMBER
     void getSurfaceParallel(float A[],float y,float x)

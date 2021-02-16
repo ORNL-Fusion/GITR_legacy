@@ -46,7 +46,7 @@ void getSlowDownFrequencies ( float& nu_friction, float& nu_deflection, float& n
                         int nR_Bfield, int nZ_Bfield,
                         float* BfieldGridR ,float* BfieldGridZ ,
                         float* BfieldR ,float* BfieldZ ,
-                 float* BfieldT,float &T_background 
+                 float* BfieldT,float &T_background, float density_fraction
                 ) {
 int feenableexcept(FE_INVALID | FE_OVERFLOW);			
         float Q = 1.60217662e-19;
@@ -59,7 +59,7 @@ int feenableexcept(FE_INVALID | FE_OVERFLOW);
         float ti_eV = interp2dCombined(x,y,z,nR_Temp,nZ_Temp,TempGridr,TempGridz,ti);
 	
 	T_background = ti_eV;
-        float density = interp2dCombined(x,y,z,nR_Dens,nZ_Dens,DensGridr,DensGridz,ni);
+        float density = density_fraction*interp2dCombined(x,y,z,nR_Dens,nZ_Dens,DensGridr,DensGridz,ni);
             //std::cout << "ion t and n " << te_eV << "  " << density << std::endl;
 	//printf ("te ti dens %f %f %f \n", te_eV, ti_eV, density);
 	float flowVelocity[3]= {0.0f};
@@ -321,8 +321,7 @@ void getSlowDownDirections (float parallel_direction[], float perp_direction1[],
                         int nR_Bfield, int nZ_Bfield,
                         float* BfieldGridR ,float* BfieldGridZ ,
                         float* BfieldR ,float* BfieldZ ,
-                 float* BfieldT 
-    ) {
+                 float* BfieldT) {
 	        float flowVelocity[3]= {0.0f};
                 float relativeVelocity[3] = {0.0, 0.0, 0.0};
                 float B[3] = {0.0f};
@@ -618,7 +617,7 @@ void operator()(std::size_t indx)  {
                              BfieldGridZ,
                              BfieldR,
                              BfieldZ,
-                             BfieldT, T_background);
+                             BfieldT, T_background,particlesPointer->density_fraction[indx]);
 
       //getSlowDownDirections(parallel_direction, perp_direction1, perp_direction2,
       //                      x, y, z,
@@ -639,7 +638,7 @@ void operator()(std::size_t indx)  {
                             relativeVelocity[0] , relativeVelocity[1] , relativeVelocity[2] );
       
       float ti_eV = interp2dCombined(x, y, z, nR_Temp, nZ_Temp, TempGridr, TempGridz, ti);
-      float density = interp2dCombined(x, y, z, nR_Dens, nZ_Dens, DensGridr, DensGridz, ni);
+      float density = particlesPointer->density_fraction[indx] *interp2dCombined(x, y, z, nR_Dens, nZ_Dens, DensGridr, DensGridz, ni);
       
       if(nu_parallel <=0.0) nu_parallel = 0.0;
       float coeff_par = n1 * std::sqrt(2.0*nu_parallel * dt);

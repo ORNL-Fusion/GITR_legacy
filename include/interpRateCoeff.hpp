@@ -72,7 +72,7 @@ CUDA_CALLABLE_MEMBER
 float interpRateCoeff2d ( int charge, float x, float y, float z,int nx, int nz, float* tempGridxp,
        float* tempGridzp, float* Tempp,
        float* densGridxp,float* densGridzp,float* Densp,int nT_Rates, int nD_Rates,
-       float* rateGrid_Temp,float* rateGrid_Dens,float* Rates ) {
+       float* rateGrid_Temp,float* rateGrid_Dens,float* Rates, float density_fraction ) {
 //    std::cout << "rate test " << Tempp[0] << std::endl;
     /*std::vector<float>& Tdata = *Tempp;
     std::vector<float>& Tgridx = *tempGridxp;
@@ -85,7 +85,7 @@ float interpRateCoeff2d ( int charge, float x, float y, float z,int nx, int nz, 
     //std::cout << "Interpolating local temp at "<<x << " " << y << " " << z << std::endl;
     float tlocal = interp2dCombined(x,y,z,nx,nz,tempGridxp,tempGridzp,Tempp);
     //std::cout << "Interpolating local dens " << std::endl;
-    float nlocal = interp2dCombined(x,y,z,nx,nz,densGridxp,densGridzp,Densp);
+    float nlocal = density_fraction*interp2dCombined(x,y,z,nx,nz,densGridxp,densGridzp,Densp);
     //std::cout << "tlocal" << tlocal << std::endl;
     //std::cout << "nlocal" << nlocal << std::endl;
     //std::cout << "Interpolating RC " << std::endl;

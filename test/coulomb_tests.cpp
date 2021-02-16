@@ -71,7 +71,7 @@ TEST_CASE("Coulomb collision", "tests") {
                              BfieldGridZ.data(),
                              BfieldR.data(),
                              BfieldZ.data(),
-                             BfieldT.data(), T_background);
+                             BfieldT.data(), T_background,1.0f);
       std::cout << "nu_friction " << nu_friction << std::endl;
       std::cout << "nu_deflection " << nu_deflection << std::endl;
       std::cout << "nu_parallel " << nu_parallel << std::endl;
@@ -147,7 +147,7 @@ TEST_CASE("Coulomb collision", "tests") {
                              BfieldGridZ.data(),
                              BfieldR.data(),
                              BfieldZ.data(),
-                             BfieldT.data(), T_background);
+                             BfieldT.data(), T_background,1.0f);
       //std::cout << "nu_friction " << nu_friction << std::endl;
       //std::cout << "nu_deflection " << nu_deflection << std::endl;
       //std::cout << "nu_parallel " << nu_parallel << std::endl;
@@ -424,7 +424,7 @@ auto gitr_start_clock = gitr_time::now();
                              BfieldGridZ.data(),
                              BfieldR.data(),
                              BfieldZ.data(),
-                             BfieldT.data(), T_background);
+                             BfieldT.data(), T_background,1.0f);
 	   vx = vx - nu_friction*dt*(vx - flowVr[0]); 
 	   vy = vy - nu_friction*dt*(vy - flowVt[0]); 
 	   vz = vz - nu_friction*dt*(vz - flowVz[0]); 

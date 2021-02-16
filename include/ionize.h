@@ -131,7 +131,7 @@ struct ionize {
           particlesPointer->y[indx], particlesPointer->z[indx], nR_Temp,
           nZ_Temp, TempGridr, TempGridz, te, DensGridr, DensGridz, ne,
           nTemperaturesIonize, nDensitiesIonize, gridTemperature_Ionization,
-          gridDensity_Ionization, rateCoeff_Ionization);
+          gridDensity_Ionization, rateCoeff_Ionization, particlesPointer->density_fraction[indx]);
       //float interp1 = field1->interpolate(1.0,2.0,3.0);
       float P = expf(-dt / tion);
       float P1 = 1.0 - P;

@@ -91,7 +91,7 @@ CUDA_CALLABLE_MEMBER
 float getE ( float x0, float y, float z, float E[], Boundary *boundaryVector, int nLines,
        int nR_closeGeom, int nY_closeGeom,int nZ_closeGeom, int n_closeGeomElements, 
        float *closeGeomGridr,float *closeGeomGridy, float *closeGeomGridz, int *closeGeom, 
-         int&  closestBoundaryIndex) {
+         int&  closestBoundaryIndex, float& density_fraction) {
 #if USE3DTETGEOM > 0
     float Emag = 0.0f;
     float Er = 0.0f;
@@ -704,7 +704,9 @@ float getE ( float x0, float y, float z, float E[], Boundary *boundaryVector, in
     //std::cout << " larmorRad " << boundaryVector[minIndex].larmorRadius << std::endl;
         float debyeLength = boundaryVector[minIndex].debyeLength;
         float larmorRadius = boundaryVector[minIndex].larmorRadius;
-        Emag = pot*(fd/(2.0f * boundaryVector[minIndex].debyeLength)*expf(-minDistance/(2.0f * boundaryVector[minIndex].debyeLength))+ (1.0f - fd)/(boundaryVector[minIndex].larmorRadius)*expf(-minDistance/boundaryVector[minIndex].larmorRadius) );
+        //Emag = pot*(fd/(2.0f * boundaryVector[minIndex].debyeLength)*expf(-minDistance/(2.0f * boundaryVector[minIndex].debyeLength))+ (1.0f - fd)/(boundaryVector[minIndex].larmorRadius)*expf(-minDistance/boundaryVector[minIndex].larmorRadius) );
+        Emag = pot*(1.0f/(boundaryVector[minIndex].lambda)*expf(-minDistance/(boundaryVector[minIndex].lambda)));
+            density_fraction = 1.0f - expf(-minDistance/(boundaryVector[minIndex].lambda));
         float part1 = pot*(fd/(2.0f * boundaryVector[minIndex].debyeLength)*expf(-minDistance/(2.0f * boundaryVector[minIndex].debyeLength)));
         float part2 = pot*(1.0f - fd)/(boundaryVector[minIndex].larmorRadius)*expf(-minDistance/boundaryVector[minIndex].larmorRadius);
         if(isnan(Emag)){
@@ -873,6 +875,7 @@ float operationsTime = 0.0f;
 	        float vpxB[3] = {0.0f,0.0f,0.0f};
 	        float qp_vmxB[3] = {0.0f,0.0f,0.0f};
 	        float c_vpxB[3] = {0.0f,0.0f,0.0f};
+          float density_fraction = 1.0;
             vectorAssign(particlesPointer->xprevious[indx], particlesPointer->yprevious[indx], particlesPointer->zprevious[indx],position);
             
             for ( int s=0; s<nSteps; s++ ) 
@@ -882,7 +885,8 @@ float operationsTime = 0.0f;
                           nY_closeGeom_sheath,nZ_closeGeom_sheath,
                               n_closeGeomElements_sheath,closeGeomGridr_sheath,
                               closeGeomGridy_sheath,
-                                   closeGeomGridz_sheath,closeGeom_sheath, closestBoundaryIndex);
+                                   closeGeomGridz_sheath,closeGeom_sheath, closestBoundaryIndex, density_fraction);
+            particlesPointer->density_fraction[indx] = density_fraction;
               //std::cout << "Efield in boris " <<E[0] << " " << E[1] << " " <<  E[2] << std::endl;
               //std::cout << "Charge and Hitwall " << particlesPointer->charge[indx] << " " <<
                // particlesPointer->hitWall[indx]  << std::endl;

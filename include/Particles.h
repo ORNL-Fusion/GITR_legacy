@@ -85,6 +85,7 @@ public:
   sim::Array<float> weight;
   sim::Array<float> firstIonizationZ;
   sim::Array<float> firstIonizationT;
+  sim::Array<float> density_fraction;
 
   //  void BorisMove(double dt, double xMinV, double xMaxV, double yMin, double
   //  yMax, double zMin, double zMax);
@@ -271,7 +272,8 @@ public:
     distanceTraveled{nParticles,0.0}, 
     weight{nParticles, 1.0}, 
     firstIonizationZ{nParticles, 0.0},
-    firstIonizationT{nParticles, 0.0} {};
+    firstIonizationT{nParticles, 0.0},
+    density_fraction{nParticles, 1.0} {};
   
   //CUDA_CALLABLE_MEMBER_DEVICE
   //      #if __CUDACC__  
