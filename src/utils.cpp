@@ -531,6 +531,7 @@ int importGeometry(libconfig::Config &cfg_geom, sim::Array<Boundary> &boundaries
        boundaries[i].area = geom["area"][i];
        boundaries[i].surface = geom["surface"][i];
        boundaries[i].inDir = geom["inDir"][i];
+       boundaries[i].lambda = geom["lambda"];
   #if USE_SURFACE_POTENTIAL > 0
        boundaries[i].potential = geom["potential"][i];
   #endif
