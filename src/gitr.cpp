@@ -2279,11 +2279,11 @@ int main(int argc, char **argv, char **envp) {
       Efieldz(nR_Bfield * nZ_Bfield), Efieldt(nR_Bfield * nZ_Bfield),
       minDist(nR_Bfield * nZ_Bfield);
 
+  float density_fraction = 0;
 #if USESHEATHEFIELD > 0
   float thisE0[3] = {0.0, 0.0, 0.0};
   float minDist0 = 0.0;
   int minInd_bnd = 0;
-  float density_fraction = 0;
   for (int i = 0; i < 1000; i++) {
       minDist0 =
           getE(0.0, 0.0, 1.0E-6*i, thisE0, boundaries.data(),
